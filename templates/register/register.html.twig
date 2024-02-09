@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	Inscription
+{% endblock %}
+
+{% block content %}
+	<h1 class="mt-4">
+		Inscription au Site
+	</h1>
+
+	{{ form_start(form) }}
+
+	{{form_row(form.firstName)}}
+
+	{{form_row(form.lastName)}}
+
+	{{form_row(form.email,{'label':false,'attr':{'placeholder':'entrez un email'}})}}
+
+	{{form_row(form.password)}}
+	
+    {{form_row(form.confirmPassword)}}
+
+	{{ form_end(form) }}
+{% endblock %}

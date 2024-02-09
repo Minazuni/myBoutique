@@ -17,11 +17,10 @@ class RegisterController extends AbstractController
     private $passwordHasher;
     private $manager;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher,EntityManagerInterface $manager)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $manager)
     {
         $this->passwordHasher = $passwordHasher;
         $this->manager = $manager;
-
     }
 
 
@@ -39,23 +38,29 @@ class RegisterController extends AbstractController
 
         $form->handleRequest($request);
 
-       if($form->isSubmitted()&&$form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
-      
 
-      $hashedPassword = $this->passwordHasher->hashPassword(
-        $user,
-        $user->getPassword()
-      );
-      $user->setPassword($hashedPassword);
 
-//Persiste les données dans le temps 
-$this->manager->persist($user);
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                $user->getPassword()
+            );
+            $user->setPassword($hashedPassword);
 
-//ecrit dans la BDD
-$this ->manager->flush();
+            //Persiste les données dans le temps 
+            $this->manager->persist($user);
 
-       }
+            //ecrit dans la BDD
+            $this->manager->flush();
+
+            $this->addFlash(
+                'success',
+                'le compte'.$user->getEmail().'a bien été créé'
+            );
+
+            return $this->redirectToRoute('app_login');
+        }
 
         return $this->render('register/register.html.twig', [
             'form' => $form->createView()

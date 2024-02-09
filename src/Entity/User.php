@@ -6,8 +6,14 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(
+    fields: ['email'],
+    message: 'l\'email existe déjà .',
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -16,6 +22,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    // #[Assert\Email(
+    //     message: 'l\'email {{ value }} n\'est pas valide.',
+    // )]
+    #[Assert\NotBlank(message:'Vous devez entrez un email')]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -25,14 +35,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    // #[Assert\Regex(
+    //     pattern: '#(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,}#',
+    //     match: true,
+    //     message: 'Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et doit faire au moins 8 caractères',
+    // )]
     private ?string $password = null;
+    #[Assert\EqualTo(
+        propertyPath : 'password',
+        message :'les deux mots de passe ne sont pas identiques '
+    )]
+ 
 
     public $confirmPassword;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:'Vous devez entrez un Prenom')]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le Prenom doit avoir un minimum de  {{ limit }} caractères',
+        maxMessage: 'Le Prenom doit faire un maximum de  {{ limit }} caractères',
+    )]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:'Vous devez entrez un Nom')]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le Nom doit avoir un minimum de  {{ limit }} caractères',
+        maxMessage: 'Le Nom doit faire un maximum de  {{ limit }} caractères',
+    )]
     private ?string $lastName = null;
 
     public function getId(): ?int

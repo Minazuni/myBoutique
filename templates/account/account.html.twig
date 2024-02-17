@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccountController!
+{% endblock %}
+
+{% block content %}
+	<h1>
+		Mon compte
+	</h1>
+
+	Bienvenu
+	{{app.user.lastName}}
+	{{app.user.firstName}}dans votre compte - vous pouvez gerer vos informations personnelles.<br>
+
+	<br class="mt-4">
+	-
+	<a href="{{path('account_password')}}">
+		Modification mdp</a>
+	<br>
+	- Ajouter mes adresses<br>
+	- Les commandes<br>
+
+
+{% endblock %}

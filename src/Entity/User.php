@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(
     fields: ['email'],
     message: 'l\'email existe déjà .',
+    groups:['register'],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -22,9 +23,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    // #[Assert\Email(
-    //     message: 'l\'email {{ value }} n\'est pas valide.',
-    // )]
+     #[Assert\Email(
+         message: 'l\'email {{ value }} n\'est pas valide.',
+        groups:['register'],
+    )]
     #[Assert\NotBlank(message:'Vous devez entrez un email')]
     private ?string $email = null;
 
@@ -35,19 +37,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message:'Vous devez entrez un mot de passe ', groups:['register'])]
+    
     // #[Assert\Regex(
     //     pattern: '#(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,}#',
     //     match: true,
     //     message: 'Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et doit faire au moins 8 caractères',
     // )]
     private ?string $password = null;
+    
     #[Assert\EqualTo(
         propertyPath : 'password',
-        message :'les deux mots de passe ne sont pas identiques '
+        message :'les deux mots de passe ne sont pas identiques ',
+        groups:['register'],
     )]
  
-
     public $confirmPassword;
+
+
+    private $oldPassword ;
+    #[Assert\NotBlank(message:'Vous devez entrez un mot de passe ')]
+    //  #[Assert\Regex(
+    //     pattern: '#(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,}#',
+    //     match: true,
+    //     message: 'Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et doit faire au moins 8 caractères',
+    // )]
+    private $newPassword;
+
+    #[Assert\EqualTo(
+        propertyPath : 'newPassword',
+        message :'les deux mots de passe ne sont pas identiques '
+    )]
+
+    private $confirmNewPassword;
+
+    public function getOldPassword()
+{
+return $this->oldPassword;
+}
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:'Vous devez entrez un Prenom')]
@@ -56,6 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 50,
         minMessage: 'Le Prenom doit avoir un minimum de  {{ limit }} caractères',
         maxMessage: 'Le Prenom doit faire un maximum de  {{ limit }} caractères',
+        groups:['register'],
     )]
     private ?string $firstName = null;
 
@@ -66,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 50,
         minMessage: 'Le Nom doit avoir un minimum de  {{ limit }} caractères',
         maxMessage: 'Le Nom doit faire un maximum de  {{ limit }} caractères',
+        groups:['register'],
     )]
     private ?string $lastName = null;
 
@@ -159,6 +188,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of newPassword
+     */ 
+    public function getNewPassword()
+    {
+        return $this->newPassword;
+    }
+
+    /**
+     * Set the value of newPassword
+     *
+     * @return  self
+     */ 
+    public function setNewPassword($newPassword)
+    {
+        $this->newPassword = $newPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of confirmNewPassword
+     */ 
+    public function getConfirmNewPassword()
+    {
+        return $this->confirmNewPassword;
+    }
+
+    /**
+     * Set the value of confirmNewPassword
+     *
+     * @return  self
+     */ 
+    public function setConfirmNewPassword($confirmNewPassword)
+    {
+        $this->confirmNewPassword = $confirmNewPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of oldPassword
+     */ 
+
+
+    /**
+     * Set the value of oldPassword
+     *
+     * @return  self
+     */ 
+    public function setOldPassword($oldPassword)
+    {
+        $this->oldPassword = $oldPassword;
 
         return $this;
     }

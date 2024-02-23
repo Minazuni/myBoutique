@@ -5,14 +5,18 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\Validator\Constraints\Email;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ArrayFilter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCrudController extends AbstractCrudController
@@ -20,10 +24,9 @@ class UserCrudController extends AbstractCrudController
 
     private $passwordHasher;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher, )
+    public function __construct(UserPasswordHasherInterface $passwordHasher,)
     {
         $this->passwordHasher = $passwordHasher;
-       
     }
 
 
@@ -49,6 +52,53 @@ class UserCrudController extends AbstractCrudController
     {
         return $crud->setFormOptions(['validation_groups' => ['register']]);
     }
+
+
+    public function configureActions(Actions $actions): Actions
+    {
+
+        $goToStripe = Action::new('goToStripe')
+    ->linkToUrl('https://www.stripe.com/')
+    ->createAsGlobalAction()
+;
+
+        return $actions
+
+            ->add('index', 'detail')
+
+            ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
+                return
+                    $action->setIcon('fa fa-trash')
+                    ->displayIf(static function ($entity) {
+                        foreach ($entity->getRoles() as $role) {
+                            return $role != 'ROLE_ADMIN';
+                        }
+                    }) ;
+                return $action;
+            })
+            ->update(Crud::PAGE_DETAIL, Action::DELETE, function (Action $action) {
+                return
+                    $action->setIcon('fa fa-trash')
+                    ->displayIf(static function ($entity) {
+                        foreach ($entity->getRoles() as $role) {
+                            return $role != 'ROLE_ADMIN';
+                        }
+                    }) ;
+                return $action;
+            })
+            ;
+
+    }
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('firstName')
+            ->add('lastName')
+            ->add(ArrayFilter::new('roles')->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => '']))
+         
+        ;
+    }
+
 
     public function configureFields(string $pageName): iterable
     {

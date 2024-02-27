@@ -25,7 +25,7 @@ class Category
 
     public function __construct()
     {
-        $this->produits = new ArrayCollection();
+    
         $this->products = new ArrayCollection();
     }
 
@@ -80,7 +80,10 @@ class Category
         return $this;
     }
 
-
+public function __toString()
+{
+   return $this->name;
+}
 
 
   

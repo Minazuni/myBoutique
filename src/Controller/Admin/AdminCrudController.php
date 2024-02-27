@@ -25,9 +25,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserCrudController extends AbstractCrudController
+class AdminCrudController extends AbstractCrudController
 {
-
     private $passwordHasher;
 
     public function __construct(UserPasswordHasherInterface $passwordHasher,)
@@ -44,9 +43,8 @@ class UserCrudController extends AbstractCrudController
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $reponse =  $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $reponse -> andwhere("entity.roles not LIKE '%ROLE_ADMIN%'");
-        return $reponse
-        ->orderBy('entity.id','DESC');
+        $reponse -> andwhere("entity.roles  LIKE '%ROLE_ADMIN%'");
+        return $reponse;
     }
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
@@ -77,7 +75,10 @@ class UserCrudController extends AbstractCrudController
 
         return $actions
 
+
             ->add('index', 'detail')
+
+            ->remove('index',action::BATCH_DELETE)
 
             ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
                 return

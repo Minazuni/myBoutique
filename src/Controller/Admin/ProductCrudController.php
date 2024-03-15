@@ -26,7 +26,7 @@ class ProductCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name'),
-            SlugField::new('slug')->setTargetFieldName('name')->onlyWhenCreating(),
+            // SlugField::new('slug')->setTargetFieldName('name')->onlyWhenCreating(),
             TextField::new('name'),
             ImageField::new('picture')->setUploadDir('public/uploads')->setBasePath('uploads/')->setRequired($pageName == Crud::PAGE_NEW),
             TextField::new('subtitle'),

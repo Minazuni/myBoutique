@@ -7,21 +7,47 @@
 	<h1 class="mt-3">Nos Produits</h1>
 
 	<div class="row">
-    
-	<div class="row row-cols-1 row-cols-md-2 g-4">
-{% for product in products %}
-  <div class="col">
-    <div class="card">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      </div>
-    </div>
-  </div>
+		<div class="col-md-3">
+			Mes Filtres
 
-{% endfor %}
-</div>
+
+			{{ form_start(form) }}
+
+			{{ form_end(form) }}
+			<a href="{{path('products')}}" class="btn btn-danger">
+				Réinitialiser filtre</a>
+		</div>
+		<div class="col-md-9">
+
+			<div class="row row-cols-1 row-cols-md-3 g-4">
+				{% if products is empty %}
+					<div class="alert alert-danger">
+						Il n'y a pas de produit dans cette catégorie
+					</div>
+				{% endif %}
+	
+		
+
+				{% for product in products %}
+
+					<div class="col">
+						<div class="card">
+							<a href="{{path('product', {'slug':product.slug})}}"><img src="/uploads/{{product.picture}}" class="card-img-top" alt="{{product.name}}"></a>
+							<div class="card-body">
+								<h5 class="card-title">{{product.name}}</h5>
+								<p class="card-text">{{product.subtitle}}</p>
+								<p>{{product.price/100}}
+									$</p>
+								<p>{{product.category}}
+								</p>
+								<button type="button" class="btn btn-primary">Primary</button>
+							</div>
+						</div>
+					</div>
+
+				{% endfor %}
+			</div>
+		</div>
 	</div>
 
 {% endblock %}

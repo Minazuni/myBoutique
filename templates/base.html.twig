@@ -11,7 +11,7 @@
 				Welcome
 			{% endblock %}
 		</title>
-
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 		<link
 		rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/carousel/">
 
@@ -24,13 +24,10 @@
 		</head>
 		<body>
 
-			<header">
-				{% include "partials/header.html.twig" %}
-			</header>
-
+			<header>"{%include"partials/header.html.twig"%}</header>
 			<main>
-				{% if block ('carousel') is defined %}
-					<div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+				{%if block('carousel')is defined%}
+					<divid="myCarousel"class="carouselslidemb-6" data-bs-ride=" carousel">
 						<div class="carousel-indicators">
 							<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
 							<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -92,13 +89,14 @@
 
 					<footer class="container-fluid">
 
-						{% include "partials/footer.html.twig" %}
-					</footer>
-				</main>
-				<script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
-				<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
-				{% block javascript %}
-				{% endblock%}
-
+						{% include "partials/footer.html.twig" %}</footer>
+				</html>
 			</body>
 		</html>
+	</main>
+	<script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
+	<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
+	{% block javascript %}
+	{% endblock%}
+
+</body></html>

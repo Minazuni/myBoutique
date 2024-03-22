@@ -27,23 +27,23 @@
 			<tr>
 				<th scope="row"><img src="/uploads/{{product.product.picture}}" alt="{{product.product.name}}" style="width: 50px"></th>
 				<td>{{product.product.name}}</td>
-				<td></td>
 				<td>
 					<a href="{{path('rm_cart', {'id':product.product.id})}}">
 						<i class="fas fa-minus"></i>
 					</a>
-					&nbsp
+
 					{{product.quantity}}
-					&nbsp
+
 					<a href="{{path('add_to_cart', {'id':product.product.id})}}">
 						<i class="fas fa-plus"></i>
 					</a>
 				</td>
+
+				<td>{{product.product.price /100}}
+					€</td>
+				<td>{{(product.quantity * product.product.price /100)|number_format(2) }}
+					€</td>
 			</tr>
-		</td>
-		<td>{{product.product.price /100}}
-			€</td>
-		<td>{{(product.quantity * product.product.price /100)|number_format(2) }}
-			€</td>
+		</tbody>
 	</tbody>
 </tr>{% endfor %}</tbody></td></tr></tbody></tbody></tr></tbody></tbody> </table>{% endblock %}

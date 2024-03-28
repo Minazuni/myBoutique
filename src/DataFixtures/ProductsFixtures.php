@@ -27,7 +27,7 @@ class ProductsFixtures extends Fixture
                 ->setDescription($faker->paragraph(3))
                 ->setSubtitle($faker->words(3, true))
                 ->setPrice($faker->numberBetween(1000, 20000))
-                ->setPicture($faker->image('/Users/kylianomahony/ProjetPHP/myBoutique/public/uploads', 360, 360, 'animals', false, true, 'cats', true));
+                ->setPicture($faker->image('C:\laragon\www\myBoutique\public\uploads', 360, 360, 'animals', false, true, 'cats', true));
             $manager->persist($product);
         }
 

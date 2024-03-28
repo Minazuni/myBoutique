@@ -5,45 +5,62 @@
 
 {% block content %}
 
-<h1 class="mt-3">Mon panier</h1>
-<p>Ensemble de vos produits ajoutés au panier</p>
-<hr>
+	<h1 class="mt-4">Mon Panier</h1>
+	<p>Ensemble des produits du panier</p>
+	<hr>
 
-<pre>
-    
-    </pre>
-<table class="table">
-	<thead>
-		<tr>
-			<th scope="col">produits</th>
-			<th scope="col">Noms</th>
-			<th scope="col">Quantité</th>
-			<th scope="col">Prix</th>
-			<th scope="col">Total</th>
-		</tr>
-	</thead>
-	<tbody>
+	<table class="table">
+		<thead>
+
+			<tr>
+				<th scope="col">Produits</th>
+				<th scope="col">Nom</th>
+				<th scope="col">Quantité</th>
+				<th scope="col">Prix</th>
+				<th scope="col">Total</th>
+				<th scope="col">Supprimer</th>
+			</tr>
+		</thead>
+
+
+	</tr>
+
+	<tbody>{% set total = null %}
 		{% for product in cart %}
+			{% set total = total + product.quantity * product.product.price%}
 			<tr>
 				<th scope="row"><img src="/uploads/{{product.product.picture}}" alt="{{product.product.name}}" style="width: 50px"></th>
 				<td>{{product.product.name}}</td>
 				<td>
-					<a href="{{path('rm_cart', {'id':product.product.id})}}">
+					<a href="{{path('decrease_to_cart', {'id':product.product.id})}}">
 						<i class="fas fa-minus"></i>
 					</a>
-
+					&nbsp
 					{{product.quantity}}
-
+					&nbsp
 					<a href="{{path('add_to_cart', {'id':product.product.id})}}">
 						<i class="fas fa-plus"></i>
 					</a>
 				</td>
+				<td>{{product.product.price / 100}}
+					€</td>
+				<td>{{product.quantity * product.product.price /100}}
+					€</td>
+				<td>
+					<a href="{{ path('delete_product', {'id': product.product.id}) }}" class="btn btn-danger">
+						<i class="fas fa-trash-alt"></i>
+					</a>
+				</td>
 
-				<td>{{product.product.price /100}}
-					€</td>
-				<td>{{(product.quantity * product.product.price /100)|number_format(2) }}
-					€</td>
 			</tr>
-		</tbody>
+		{% endfor %}
+
 	</tbody>
-</tr>{% endfor %}</tbody></td></tr></tbody></tbody></tr></tbody></tbody> </table>{% endblock %}
+</table>
+<div class="text-end">
+	Nombre de produits :
+	{{ cart |length}}<br>
+	<b>Total:
+		{{total/100}}</b>
+	<a href="" class="btn btn-success">Valider le panier</a>
+</div>{% endblock %}

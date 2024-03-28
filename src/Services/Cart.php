@@ -4,19 +4,19 @@ namespace App\Services;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class Cart 
+class Cart
 {
 
     private $requestStack;
 
-    public function __construct( RequestStack $requestStack,)
-     {
-      
+    public function __construct(RequestStack $requestStack,)
+    {
+
         $this->requestStack = $requestStack;
     }
 
-//ajout d'un id d'un produit
-public function add($id)
+    //ajout d'un id d'un produit
+    public function add($id)
     {
         $cart = $this->requestStack->getSession()->get('cart', []);
 
@@ -37,29 +37,40 @@ public function add($id)
 
 
     //recupération du panier
-public function get(){
+    public function get()
+    {
 
-    return   $this-> requestStack->getSession()->get('cart',[]);
-}
+        return   $this->requestStack->getSession()->get('cart', []);
+    }
+
+    //suppresion  du panier 
+    public function remove()
+    {
+
+        return   $this->requestStack->getSession()->remove('cart');
+    }
 
 
-public function remove(){
-
-    return   $this-> requestStack->getSession()->remove('cart');
-
-
-}
-
-public function rm($id)
+    public function decrease($id)
     {
         $cart = $this->requestStack->getSession()->get('cart', []);
 
 
-        if (!empty($cart[$id])) {
+        if ($cart[$id] > 1) {
             $cart[$id]--;
+        } else {
+            unset($cart[$id]);
         }
-        else return $this->requestStack->getSession()->remove('cart');
+
 
         $this->requestStack->getSession()->set('cart', $cart);
+    }
+    //suppresion d'un produit du panier 
+    public function delete($id)
+    {
+
+        $cart = $this->requestStack->getSession()->get('cart', []);
+
+        unset($cart[$id]);
     }
 }

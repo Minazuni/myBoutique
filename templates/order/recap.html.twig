@@ -12,6 +12,19 @@
 	</p>
 	<hr>
 
+	<strong>Adresse de livraison
+	</strong>
+	{{order.delivery | replace({'[br]' : '<br>'}) | raw }}
+	<hr>
+	<strong>
+		Transporteurs
+	</strong>
+	<br>
+	{{order.carrier.name}}
+	<br>
+	{{order.carrier.description}}
+	<br>
+	{{order.carrier.price}}€
 
 	<div class="row">
 		<div class="col-md-6"></div>
@@ -20,9 +33,10 @@
 
 			{% set total = null %}
 			{% for product in cart %}
+
 				<div class="row-mt-3">
 					<br>
-					{% set total = total + product.quantity * product.product.price%}
+					{% set total = total + product.quantity * product.product.price %}
 					<tr>
 						<th scope="row"><img src="/uploads/{{product.product.picture}}" alt="{{product.product.name}}" style="width: 50px"></th>
 						<td>{{product.product.name}}</td>
@@ -40,9 +54,28 @@
 					</tr>
 				</div>
 			{% endfor %}
+			<hr>
+			<strong>Sous-total :
+			</strong>
+			{{total/100 | number_format(2)}}<br>
+			<strong>
+				Livraison :
+																																																																								
+																																																																								€</strong>
+			{{order.carrier.price}}
+			<hr>
+			<strong>
+				Total :
+			</strong>
+			{{total/100 + order.carrier.price | number_format(2)}}
+			€
 
-
-		</div>
-
+			<a href="{{url_stripe}}" class="btn btn-success col-12">Payer
+				{{total/100 +  order.carrier.price | number_format(2)}}
+				€</a>
+			payer
+			{{total/100 | number_format(2)}}
+			€</a>
 	</div>
-{% endblock %}
+
+</div>{% endblock %}
